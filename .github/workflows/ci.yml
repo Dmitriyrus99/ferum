@@ -25,7 +25,13 @@ jobs:
           sudo apt-get install -y mariadb-server redis-server xvfb libxrender1 libxext6 libsm6
           sudo systemctl start mariadb
           sudo systemctl start redis-server
-          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+
+      - name: Configure MariaDB root user
+        run: |
+          sudo mysql -u root <<EOF
+          ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+          FLUSH PRIVILEGES;
+          EOF
 
       - name: Install Bench CLI
         run: pip install frappe-bench
@@ -42,3 +48,4 @@ jobs:
         run: |
           cd test-bench
           bench --site test-site.local run-tests --app ferum_customs
+
