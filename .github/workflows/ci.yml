@@ -40,9 +40,10 @@ jobs:
         run: |
           bench init test-bench --frappe-branch version-15 --python python3.11
           cd test-bench
-          bench get-app ferum_custom file://${{ github.workspace }}/ferum_customs
+          bench get-app ferum_customs https://github.com/Dmitriyrus99/ferum.git
           bench new-site test-site.local --mariadb-root-password root --admin-password admin --install-app erpnext
-          bench --site test-site.local install-app ferum_custom
+          bench --site test-site.local install-app ferum_customs
+
 
 
       - name: Run tests
