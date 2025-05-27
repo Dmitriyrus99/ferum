@@ -1,0 +1,50 @@
+name: Ferum Customizations CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install Bench CLI
+        run: pip install frappe-bench
+
+      - name: Set up Bench project
+        run: |
+          bench init test-bench --frappe-branch version-15
+          cd test-bench
+          bench get-app ferum_customs ${{ github.workspace }}
+          bench new-site test-site --mariadb-root-password root --admin-password admin
+          bench --site test-site install-app ferum_customs
+
+      - name: Run tests
+        run: |
+          cd test-bench
+          bench --site test-site run-tests --app ferum_customs
