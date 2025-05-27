@@ -10,15 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      mariadb:
-        image: mariadb:10.6
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot" --health-interval=10s --health-timeout=5s --health-retries=5
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -31,8 +22,10 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y redis-server mariadb-client xvfb libxrender1 libxext6 libsm6
+          sudo apt-get install -y mariadb-server redis-server xvfb libxrender1 libxext6 libsm6
+          sudo systemctl start mariadb
           sudo systemctl start redis-server
+          mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
 
       - name: Install Bench CLI
         run: pip install frappe-bench
