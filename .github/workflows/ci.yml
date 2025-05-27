@@ -29,7 +29,7 @@ jobs:
       - name: Configure MariaDB root user
         run: |
           sudo mysql -u root <<EOF
-          ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+          SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
           FLUSH PRIVILEGES;
           EOF
 
@@ -48,4 +48,3 @@ jobs:
         run: |
           cd test-bench
           bench --site test-site.local run-tests --app ferum_customs
-
