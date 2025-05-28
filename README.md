@@ -1,10 +1,32 @@
-# Ferum Customizations
+# Ferum
+**ferum** - Pithon project by Dmitriyrus99
 
-Шаблон Frappe-приложения для управления проектами, сервисными заявками и отчётами.
+Here you will find customized solutions and tools for automation, data analysis, and more.
 
-## Установка
+## Installation
 
 ```bash
-bench get-app ferum_customs https://github.com/<ваш-репозиторий>.git
-bench --site your-site install-app ferum_customs
-bench migrate
+git clone https://github.com/Dmitriyrus99/ferum.git
+cd ferum
+pis install -r requirements.txt
+```
+
+## Usage
+
+````bash
+python main.py
+```
+
+## Project structure
+
+- `src/` - main code
+- `tests/` - tests
+- `README.md` - description
+- LOCENSE - license MIT
+
+## Contribution
+Pull requests are welcome! Open issues for bugs or suggestions.
+
+## License
+
+This project is licensed under MIT License - see [LICENSE](LICENSE).
